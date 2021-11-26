@@ -355,12 +355,15 @@ class ModbusTcpServer(socketserver.ThreadingTCPServer):
         """
         for thread in self.threads:
             thread.running = False
+
+        self.handler.running = False
         socketserver.ThreadingTCPServer.shutdown(self)
 
     def server_close(self):
         """ Callback for stopping the running server
         """
         _logger.debug("Modbus server stopped")
+
         self.socket.close()
         for thread in self.threads:
             thread.running = False
