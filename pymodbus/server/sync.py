@@ -217,6 +217,10 @@ class ModbusConnectedRequestHandler(ModbusBaseRequestHandler):
                     self.framer.resetFrame()
                     reset_frame = False
 
+        _logger.debug('Request handler quit, shut down current request')
+        self.server.shutdown_request(self.request)
+        _logger.debug('Request handler quit done')
+
     def send(self, message):
         """ Send a request (string) to the network
 
@@ -355,15 +359,12 @@ class ModbusTcpServer(socketserver.ThreadingTCPServer):
         """
         for thread in self.threads:
             thread.running = False
-
-        self.handler.running = False
         socketserver.ThreadingTCPServer.shutdown(self)
 
     def server_close(self):
         """ Callback for stopping the running server
         """
         _logger.debug("Modbus server stopped")
-
         self.socket.close()
         for thread in self.threads:
             thread.running = False
