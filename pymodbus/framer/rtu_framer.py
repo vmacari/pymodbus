@@ -87,12 +87,13 @@ class ModbusRtuFramer(ModbusFramer):
         """
         try:
             self.populateHeader()
+            _logger.debug(f'Header : {self._header}')
             #frame_size = self._header['len']
             data = self._buffer[: -2]  # calculate CRC for entire frame, excluding CRC
             crc = self._header['crc']
             crc_val = (byte2int(crc[0]) << 8) + byte2int(crc[1])
 
-            _logger.debug(f'CRC should be {crc_val} on data  '
+            _logger.debug(f'CRC should be {hex(crc_val)} on data  '
                           f'{" ".join([hex(byte2int(x)) for x in data])}')
             return checkCRC(data, crc_val)
         except (IndexError, KeyError, struct.error):
@@ -155,6 +156,7 @@ class ModbusRtuFramer(ModbusFramer):
         `self._buffer` is not yet long enough.
         """
         data = data if data is not None else self._buffer
+        _logger.debug(f"Populate header from data {data}")
         self._header['uid'] = byte2int(data[0])
         func_code = byte2int(data[1])
         pdu_class = self.decoder.lookupPduClass(func_code)
