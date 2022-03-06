@@ -189,7 +189,7 @@ def checkCRC(data, check):
     :returns: True if matched, False otherwise
     """
     calculated_crc = computeCRC(data)
-    _logger.debug(f"Calculated CRC {calculated_crc}, expected {check}")
+    _logger.debug(f"Calculated CRC {hex(calculated_crc)}, expected {hex(check)}")
 
     return  calculated_crc == check
 
