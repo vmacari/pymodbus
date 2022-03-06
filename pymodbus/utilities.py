@@ -159,7 +159,7 @@ def __generate_crc16_table():
 
 __crc16_table = __generate_crc16_table()
 
-def computeCRC(data, is_swapped: bool = False):
+def computeCRC(data):
     """ Computes a crc16 on the passed in string. For modbus,
     this is only used on the binary serial protocols (in this
     case RTU).
@@ -168,17 +168,14 @@ def computeCRC(data, is_swapped: bool = False):
     is that modbus starts the crc value out at 0xffff.
 
     :param data: The data to create a crc16 of
-    :param is_swapped:  Swap CRC Hi/Low bytes
     :returns: The calculated CRC
     """
     crc = 0xffff
     for a in data:
         idx = __crc16_table[(crc ^ byte2int(a)) & 0xff]
         crc = ((crc >> 8) & 0xff) ^ idx
-    print(f'CRC: {hex(crc)}')
-    if is_swapped:
-        return ((crc << 8) & 0xff00) | ((crc >> 8) & 0x00ff)
-    return crc
+
+    return ((crc << 8) & 0xff00) | ((crc >> 8) & 0x00ff)
 
 def checkCRC(data, check):
     """ Checks if the data matches the passed in CRC

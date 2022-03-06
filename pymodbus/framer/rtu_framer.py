@@ -91,6 +91,9 @@ class ModbusRtuFramer(ModbusFramer):
             data = self._buffer[:frame_size - 2]
             crc = self._header['crc']
             crc_val = (byte2int(crc[0]) << 8) + byte2int(crc[1])
+
+            _logger.debug(f'Check CRC ({crc}  -> swp:{crc_val}) on data  '
+                          f'{" ".join([hex(byte2int(x)) for x in data])}')
             return checkCRC(data, crc_val)
         except (IndexError, KeyError, struct.error):
             return False
