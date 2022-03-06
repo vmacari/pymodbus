@@ -359,7 +359,10 @@ class ModbusTransactionManager(object):
         else:
             read_min = b''
             total = expected_response_length
+
+
         result = self.client.framer.recvPacket(expected_response_length)
+
         result = read_min + result
         actual = len(result)
         if total is not None and actual != total:
@@ -375,6 +378,12 @@ class ModbusTransactionManager(object):
             _logger.debug("Changing transaction state from "
                           "'WAITING FOR REPLY' to 'PROCESSING REPLY'")
             self.client.state = ModbusTransactionState.PROCESSING_REPLY
+
+        if _logger.isEnabledFor(logging.DEBUG):
+            _logger.debug(f"RECV: Expected recv len = {total},"
+                          f" received = {actual} : {hexlify_packets(result)}")
+
+
         return result
 
     def addTransaction(self, request, tid=None):
