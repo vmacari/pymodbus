@@ -156,7 +156,6 @@ class ModbusRtuFramer(ModbusFramer):
         `self._buffer` is not yet long enough.
         """
         data = data if data is not None else self._buffer
-        _logger.debug(f"Populate header from data {data}")
         self._header['uid'] = byte2int(data[0])
         func_code = byte2int(data[1])
         pdu_class = self.decoder.lookupPduClass(func_code)
@@ -167,7 +166,7 @@ class ModbusRtuFramer(ModbusFramer):
             # crc yet not available
             raise IndexError
 
-        self._header['crc'] = data[: -2]
+        self._header['crc'] = data[-2:]
 
     def addToFrame(self, message):
         """
