@@ -232,7 +232,10 @@ def rtuFrameSize(data, byte_count_pos):
     field, and finally increment the sum by three (one byte for the
     byte count field, two for the CRC).
     """
-    return byte2int(data[byte_count_pos]) + byte_count_pos + 3
+
+    #  slave_id + fucntion_code + 2 CRCs
+    return byte2int(len(data) - 2 - 2)
+    #return byte2int(data[byte_count_pos]) + byte_count_pos + 3
 
 
 def hexlify_packets(packet):

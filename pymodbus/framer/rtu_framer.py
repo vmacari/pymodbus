@@ -164,7 +164,7 @@ class ModbusRtuFramer(ModbusFramer):
         if len(data) < size:
             # crc yet not available
             raise IndexError
-        self._header['crc'] = data[size - 2:size]
+        self._header['crc'] = data[- 2:size]
 
     def addToFrame(self, message):
         """
