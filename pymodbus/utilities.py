@@ -5,8 +5,12 @@ Modbus Utilities
 A collection of utilities for packing data, unpacking
 data computing checksums, and decode checksums.
 """
+
 from pymodbus.compat import int2byte, byte2int, IS_PYTHON3
 from six import string_types
+
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class ModbusTransactionState(object):
@@ -184,7 +188,10 @@ def checkCRC(data, check):
     :param check: The CRC to validate
     :returns: True if matched, False otherwise
     """
-    return computeCRC(data) == check
+    calculated_crc = computeCRC(data)
+    _logger.debug(f"Calculated CRC {calculated_crc}, expected {check}")
+
+    return  calculated_crc == check
 
 
 def computeLRC(data):
