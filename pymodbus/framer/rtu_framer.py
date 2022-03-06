@@ -88,7 +88,7 @@ class ModbusRtuFramer(ModbusFramer):
         try:
             self.populateHeader()
             frame_size = self._header['len']
-            data = self._buffer[:frame_size - 2]
+            data = self._buffer[: -2]  # calculate CRC for entire frame, excluding CRC
             crc = self._header['crc']
             crc_val = (byte2int(crc[0]) << 8) + byte2int(crc[1])
 
