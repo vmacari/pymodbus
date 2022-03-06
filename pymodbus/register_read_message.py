@@ -7,6 +7,8 @@ from pymodbus.pdu import ModbusRequest
 from pymodbus.pdu import ModbusResponse
 from pymodbus.pdu import ModbusExceptions as merror
 from pymodbus.compat import int2byte, byte2int
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class ReadRegistersRequestBase(ModbusRequest):
@@ -84,9 +86,11 @@ class ReadRegistersResponseBase(ModbusResponse):
 
         :param data: The request to decode
         '''
-        byte_count = byte2int(data[0])
+
+        _logger.debug(f'Decode data {data}')
+        byte_count = len(data)  # byte2int(data[0])
         self.registers = []
-        for i in range(1, byte_count + 1, 2):
+        for i in range(0, byte_count + 1, 2):
             self.registers.append(struct.unpack('>H', data[i:i + 2])[0])
 
     def getRegister(self, index):
