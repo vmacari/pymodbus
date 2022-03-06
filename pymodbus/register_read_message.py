@@ -41,10 +41,10 @@ class ReadRegistersRequestBase(ModbusRequest):
 
     def get_response_pdu_size(self):
         """
-        Func_code (1 byte) + Byte Count(1 byte) + 2 * Quantity of Coils (n Bytes)
+            Slave address + Func_code (1 byte) + Byte Count(1 byte) + 2 * Quantity of Coils (n Bytes)
         :return: 
         """
-        return 1 + 1 + 2 * self.count
+        return 1 + 1 + 1 + 2 * self.count
 
     def __str__(self):
         ''' Returns a string representation of the instance
